@@ -1,17 +1,22 @@
 import { Box, Button, Container, Paper, Stack, TextField, Typography } from '@mui/material';
 import { useState, type ChangeEventHandler, type FormEventHandler } from 'react';
+import { useLogin } from '../../core/hooks';
 
 type TFormState = {
   email: string;
   password: string;
 };
 
-export function Auth({ onLogin }: { onLogin: () => void }) {
+export function Auth() {
   const [formState, setFormState] = useState<TFormState>({ email: '', password: '' });
+  const {isLoading, fetchLogin} = useLogin();
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    onLogin();
+
+    if (isLoading) return;
+
+    await fetchLogin(formState);
   };
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = ({ target: { name, value } }) => {
@@ -27,6 +32,7 @@ export function Auth({ onLogin }: { onLogin: () => void }) {
           </Typography>
           <Stack spacing={1}>
             <TextField
+              disabled={isLoading}
               label='E-mail'
               type='email'
               name='email'
@@ -35,6 +41,7 @@ export function Auth({ onLogin }: { onLogin: () => void }) {
               onChange={handleChange}
             />
             <TextField
+              disabled={isLoading}
               label='Password'
               type='password'
               name='password'
@@ -44,7 +51,7 @@ export function Auth({ onLogin }: { onLogin: () => void }) {
             />
           </Stack>
           <Box display='flex' justifyContent='flex-end'>
-            <Button type='submit' variant='contained'>
+            <Button loading={isLoading} type='submit' variant='contained'>
               Log in
             </Button>
           </Box>
