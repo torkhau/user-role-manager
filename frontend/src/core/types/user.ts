@@ -4,3 +4,5 @@ export interface IUser {
   name?: string;
   roles: string[];
 }
+
+export interface IUserSessionData extends Pick<IUser, 'id' | 'email'> {}

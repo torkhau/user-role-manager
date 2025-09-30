@@ -1,2 +1,2 @@
 export * from './Provider';
-export { useUser } from './context';
+export { useAuthContext } from './context';

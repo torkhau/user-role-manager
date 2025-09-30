@@ -1,9 +1,21 @@
 import { useState, type ReactNode } from 'react';
-import type { IUser } from '../../types';
-import { UserContext } from './context';
+import { useSession } from '../../hooks';
+import type { IUserSessionData } from '../../types';
+import { AuthContext } from './context';
 
-export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<IUser | null>(null);
+export const SessionProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<IUserSessionData | null>(null);
+  const { endSession, startSession } = useSession();
 
-  return <UserContext value={{ user, setUser }}>{children}</UserContext>;
+  const logout = () => {
+    setUser(null);
+    endSession();
+  };
+
+  const login = (user: IUserSessionData) => {
+    setUser(user);
+    startSession(user);
+  };
+
+  return <AuthContext value={{ user, logout, login }}>{children}</AuthContext>;
 };

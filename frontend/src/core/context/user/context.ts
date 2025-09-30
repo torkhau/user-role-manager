@@ -1,11 +1,12 @@
 import { createContext, useContext } from 'react';
-import type { IUser } from '../../types';
+import type { IUserSessionData } from '../../types';
 
-type TUserContext = {
-  user: IUser | null;
-  setUser: (user: IUser | null) => void;
+type TAuthContext = {
+  user: IUserSessionData | null;
+  logout: () => void;
+  login: (user: IUserSessionData) => void;
 };
 
-export const UserContext = createContext<TUserContext>({ user: null, setUser: () => {} });
+export const AuthContext = createContext<TAuthContext>({ user: null, login: () => {}, logout: () => {} });
 
-export const useUser = () => useContext(UserContext);
+export const useAuthContext = () => useContext(AuthContext);

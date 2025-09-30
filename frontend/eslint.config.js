@@ -15,6 +15,9 @@ export default defineConfig([
       reactHooks.configs['recommended-latest'],
       reactRefresh.configs.vite,
     ],
+    rules: {
+      "@typescript-eslint/no-empty-object-type": 'with-single-extends'
+    },
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
