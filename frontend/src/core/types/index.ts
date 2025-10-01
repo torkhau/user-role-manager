@@ -1,1 +1,2 @@
-export * from './user'
+export * from './notificationMessage';
+export * from './user';

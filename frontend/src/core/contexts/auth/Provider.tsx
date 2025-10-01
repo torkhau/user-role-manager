@@ -3,7 +3,7 @@ import { useSession } from '../../hooks';
 import type { IUserSessionData } from '../../types';
 import { AuthContext } from './context';
 
-export const SessionProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<IUserSessionData | null>(null);
   const { endSession, startSession } = useSession();
 

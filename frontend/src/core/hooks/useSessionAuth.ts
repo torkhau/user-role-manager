@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuthContext } from '../context/user';
+import { useAuthContext } from '../contexts/auth';
 import { useSession } from './useSession';
 
 export const useSessionAuth = () => {

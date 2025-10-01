@@ -1,5 +1,5 @@
 import { Container, Skeleton } from '@mui/material';
-import { useAuthContext } from './core/context/user';
+import { useAuthContext } from './core/contexts/auth';
 import { useSessionAuth } from './core/hooks';
 import { Auth, Dashboard } from './pages';
 
