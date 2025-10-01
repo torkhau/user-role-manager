@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { Role, User } from 'src/database/entities';
-import { RoleService } from '../role/role.service';
+import { RoleService } from '../role';
 import { EffectiveRoleDTO, UserDTO } from './dtos';
 import { UserService } from './user.service';
 
