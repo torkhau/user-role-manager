@@ -17,29 +17,32 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@nestjs/common": "^11.0.17",
-    "@nestjs/core": "^11.0.1",
-    "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/core": "^11.1.6",
+    "@nestjs/platform-express": "^11.1.6",
+    "@nestjs/typeorm": "^11.0.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.2",
+    "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.27"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.18.0",
-    "@nestjs/cli": "^11.0.0",
-    "@nestjs/schematics": "^11.0.0",
+    "@nestjs/cli": "^11.0.10",
+    "@nestjs/schematics": "^11.0.7",
     "@swc/cli": "^0.6.0",
-    "@swc/core": "^1.10.8",
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.10.7",
-    "eslint": "^9.18.0",
-    "globals": "^15.14.0",
+    "@swc/core": "^1.13.5",
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.18.8",
+    "eslint": "^9.36.0",
+    "globals": "^15.15.0",
     "source-map-support": "^0.5.21",
-    "ts-loader": "^9.5.2",
+    "ts-loader": "^9.5.4",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.45.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
