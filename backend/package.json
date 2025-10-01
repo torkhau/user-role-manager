@@ -10,7 +10,9 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "migration:init": "typeorm-ts-node-commonjs -d src/database/datasource.ts migration:run",
+    "seed:init": "ts-node src/database/seeds/init.seed.ts"
   },
   "engines": {
     "npm": ">=10.0.0",
