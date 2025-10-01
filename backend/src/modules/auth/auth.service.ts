@@ -18,7 +18,7 @@ export class AuthService {
 
       if (user.password !== password) throw new UnauthorizedException('Invalid password');
 
-      return { user: { id: user.id, email: user.email, name: user.username } };
+      return { user: { id: user.id, email: user.email, username: user.username } };
     } catch (error) {
       if (error instanceof UnauthorizedException) {
         throw error;
