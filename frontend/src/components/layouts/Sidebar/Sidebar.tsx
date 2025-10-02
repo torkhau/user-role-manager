@@ -1,7 +1,7 @@
 import { People, Shield } from '@mui/icons-material';
 import { List, Toolbar } from '@mui/material';
-import { useState } from 'react';
 import { SidebarItem } from '../../ui';
+import { useMenuItemContext } from '../../../core/contexts/menuItem';
 
 const items = [
   { label: 'Users', icon: <People /> },
@@ -9,10 +9,10 @@ const items = [
 ];
 
 export function Sidebar() {
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const {menuItem, setMenuItem} = useMenuItemContext()
 
   const handleSelect = (index: number) => {
-    setSelectedIndex(index);
+    setMenuItem(index);
   };
 
   return (
@@ -24,7 +24,7 @@ export function Sidebar() {
             key={item.label}
             label={item.label}
             icon={item.icon}
-            selected={selectedIndex === index}
+            selected={menuItem === index}
             onClick={() => handleSelect(index)}
           />
         ))}

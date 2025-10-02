@@ -1,7 +1,11 @@
 import { Box, Toolbar, Typography } from '@mui/material';
 import { ResponsiveDrawer } from '../../components/layouts';
+import { useMenuItemContext } from '../../core/contexts/menuItem';
 
 export function Dashboard() {
+  const { menuItem } = useMenuItemContext();
+
+  console.log(menuItem);
 
   return (
     <Box sx={{ display: 'flex' }}>
