@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { Role } from 'src/database/entities';
+import { IResponse } from 'src/types';
 import { RoleDTO } from './dtos';
 import { RoleService } from './role.service';
 
@@ -12,9 +13,9 @@ export class RoleController {
   }
 
   @Get()
-  async findAll(): Promise<RoleDTO[]> {
+  async findAll(): Promise<IResponse<RoleDTO[]>> {
     const roles = await this.roleService.findAll();
 
-    return roles.map((role) => this.toDTO(role));
+    return { data: roles.map((role) => this.toDTO(role)) };
   }
 }

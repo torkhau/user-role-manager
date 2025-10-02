@@ -2,7 +2,7 @@ import { InternalServerErrorException, UnauthorizedException } from '@nestjs/com
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/database/entities';
 import { Repository } from 'typeorm';
-import { LoginBodyDTO } from './dtos';
+import { DataDTO, LoginBodyDTO } from './dtos';
 
 export class AuthService {
   constructor(
@@ -10,7 +10,7 @@ export class AuthService {
     private userRepository: Repository<User>
   ) {}
 
-  async login({ email, password }: LoginBodyDTO) {
+  async login({ email, password }: LoginBodyDTO): Promise<DataDTO> {
     try {
       const user = await this.userRepository.findOne({ where: { email } });
 
@@ -18,7 +18,7 @@ export class AuthService {
 
       if (user.password !== password) throw new UnauthorizedException('Invalid password');
 
-      return { user: { id: user.id, email: user.email, username: user.username } };
+      return { id: user.id, email: user.email, username: user.username } ;
     } catch (error) {
       if (error instanceof UnauthorizedException) {
         throw error;

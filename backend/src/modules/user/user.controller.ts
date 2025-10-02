@@ -3,6 +3,7 @@ import { Role, User } from 'src/database/entities';
 import { RoleService } from '../role';
 import { EffectiveRoleDTO, UserDTO } from './dtos';
 import { UserService } from './user.service';
+import { IResponse } from 'src/types';
 
 @Controller('users')
 export class UserController {
@@ -29,10 +30,10 @@ export class UserController {
   }
 
   @Get()
-  async findAll(): Promise<UserDTO[]> {
+  async findAll(): Promise<IResponse<UserDTO[]>> {
     const users = await this.userService.findAll();
     const roles = await this.roleService.findAll();
 
-    return users.map((user) => this.toDTO(user, roles));
+    return {data: users.map((user) => this.toDTO(user, roles))};
   }
 }
