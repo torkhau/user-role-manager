@@ -16,9 +16,9 @@ export const useTableData = () => {
 
       const apiResponse = await getRoles();
       const { rows, headCells } = parseRoles(apiResponse);
+      
       setRows(rows);
       setHeadCells(headCells);
-
       setLoading(false);
     };
 

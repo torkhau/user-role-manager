@@ -1,6 +1,8 @@
+import type { ReactNode } from 'react';
+
 export interface HeadTableCell<T> {
   id: keyof T;
-  label: string;
+  label: ReactNode;
 }
 
 export interface TableData<T> {

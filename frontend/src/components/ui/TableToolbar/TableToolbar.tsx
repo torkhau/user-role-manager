@@ -1,8 +1,9 @@
 import { FilterList } from '@mui/icons-material';
 import { IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
+import type { ReactNode } from 'react';
 
 interface TableToolbarProps {
-  tableName: string;
+  tableName: ReactNode;
 }
 
 export function TableToolbar({ tableName }: TableToolbarProps) {

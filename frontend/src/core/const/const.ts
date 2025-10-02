@@ -7,4 +7,4 @@ export const API_BASE_URL = 'http://localhost:5173/api';
 export const DRAWER_WIDTH = 240;
 
 export const DELAY = 3000;
-export const FAKE_DELAY = false;
+export const FAKE_DELAY = true;

@@ -10,7 +10,7 @@ import type { TableData } from '../../../core/types';
 import { TableToolbar } from '../TableToolbar';
 
 interface TableAppProps<T extends { id: string | number }> extends TableData<T> {
-  tableName: string;
+  tableName: ReactNode;
   children: ReactNode;
 }
 
@@ -27,7 +27,6 @@ export function TableApp<T extends { id: string | number }>({ headCells, tableNa
               ))}
             </TableRow>
           </TableHead>
-
           <TableBody>{children}</TableBody>
         </Table>
       </TableContainer>

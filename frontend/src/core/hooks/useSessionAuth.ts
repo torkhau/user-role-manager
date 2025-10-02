@@ -27,7 +27,7 @@ export const useSessionAuth = () => {
 
         if (userData) {
           showNotification({ text: `Your session restored, ${userData.username}`, severity: 'info' });
-          login({ id: userData.id, email: userData.email, username: userData.username });
+          login({ id: userData.id, email: userData.email, username: userData.username, isAdmin: userData.isAdmin });
         }
       } else {
         showNotification({ text: 'Session expired, please log in', severity: 'warning' });

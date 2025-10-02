@@ -17,14 +17,10 @@ export const useTableData = () => {
       setLoading(true);
 
       const [roles, users] = await Promise.all([getRoles(), getUsers()]);
-
       const { rows, headCells } = parseUsers(users, roles, user?.isAdmin);
-
-      console.log(rows, headCells)
-      
+    
       setRows(rows);
       setHeadCells(headCells);
-
       setLoading(false);
     };
 
