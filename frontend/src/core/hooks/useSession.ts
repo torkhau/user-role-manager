@@ -18,9 +18,13 @@ export const useSession = () => {
   const isSessionActive = useCallback(() => {
     const expiresAt = localStorage.getItem(SESSION_EXPIRES_AT);
 
-    if (!expiresAt) return false;
+    if (expiresAt === null) return null;
 
-    return Date.now() < parseInt(expiresAt, 10);
+    const date = parseInt(expiresAt, 10);
+
+    if (isNaN(date)) return false;
+
+    return Date.now() < date;
   }, []);
 
   const getUserSessionData = useCallback(() => {

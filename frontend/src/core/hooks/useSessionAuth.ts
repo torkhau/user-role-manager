@@ -10,13 +10,22 @@ export const useSessionAuth = () => {
   const [isSessionChecking, setIsSessionChecking] = useState(true);
 
   useEffect(() => {
-    if (isSessionActive()) {
+    const isActive = isSessionActive();
+
+    if (isActive === null) {
+      setIsSessionChecking(false);
+      return;
+    }
+
+    if (isActive) {
       const userData = getUserSessionData();
 
       if (userData) {
         showNotification({ text: `Your session restored, ${userData.username}`, severity: 'info' });
         login({ id: userData.id, email: userData.email, username: userData.username });
       }
+    } else {
+      showNotification({ text: 'Session expired, please log in', severity: 'warning' });
     }
 
     setIsSessionChecking(false);
