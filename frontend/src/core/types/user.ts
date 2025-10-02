@@ -1,8 +1,11 @@
+import type { IEffectiveRole, IRole } from './role';
+
 export interface IUser {
   id: string;
   email: string;
-  name?: string;
-  roles: string[];
+  username: string;
+  roles: IRole[];
+  effectiveRoles: IEffectiveRole[];
 }
 
-export interface IUserSessionData extends Pick<IUser, 'id' | 'email'> {}
+export interface IUserSessionData extends Pick<IUser, 'id' | 'email' | 'username'> {}

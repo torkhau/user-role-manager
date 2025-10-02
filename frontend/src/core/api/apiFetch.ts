@@ -12,7 +12,7 @@ export const apiFetch = async <T>(endpoint: string, options?: RequestInit): Prom
     if (res.ok) {
       return { success: true, ...resData } as ISuccessResponse<T>;
     } else {
-      return { success: true, ...resData } as IErrorResponse;
+      return { success: false, ...resData } as IErrorResponse;
     }
   } catch (error) {
     console.error('Login failed', error);

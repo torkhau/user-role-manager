@@ -1,42 +1,23 @@
 import { useState } from 'react';
+import { auth } from '../api';
 import { useAuthContext } from '../contexts/auth';
 import { useNotificationContext } from '../contexts/notifications';
-import type { INotificationMessage } from '../types';
-
 
 export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuthContext();
   const { showNotification } = useNotificationContext();
 
-  const fetchLogin = async ({ email, password }: { email: string; password: string }) => {
+  const fetchLogin = async (body: { email: string; password: string }) => {
     setIsLoading(true);
-    const msg: INotificationMessage = { severity: 'error', text: 'Server not answer' };
 
-    try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+    const result = await auth(body);
 
-      const data = await response.json();
+    setIsLoading(false);
 
-      if (response.ok)  {
-        msg.severity = 'success';
-        msg.text = `Welcome, ${data.user.username}!`;
-        login({ id: data.user.id, email: data.user.email });
-      } else {
-        msg.text = data.message;
-      }
-      
-    } catch (error) {
-      console.error('Login failed', error);
-    } finally {
-      setIsLoading(false);
-    }
+    if (result.success) login(result.data);
 
-    showNotification(msg);
+    if (result.message) showNotification({ text: result.message, severity: result.success ? 'success' : 'error' });
   };
 
   return { isLoading, fetchLogin };
