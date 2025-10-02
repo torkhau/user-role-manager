@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { FAKE_DELAY } from '../const';
 import { useAuthContext } from '../contexts/auth';
 import { useNotificationContext } from '../contexts/notifications';
+import { fakeDelay } from '../utils';
 import { useSession } from './useSession';
 
 export const useSessionAuth = () => {
@@ -10,25 +12,31 @@ export const useSessionAuth = () => {
   const [isSessionChecking, setIsSessionChecking] = useState(true);
 
   useEffect(() => {
-    const isActive = isSessionActive();
+    const checkSession = async () => {
+      if (FAKE_DELAY) await fakeDelay();
 
-    if (isActive === null) {
-      setIsSessionChecking(false);
-      return;
-    }
+      const isActive = isSessionActive();
 
-    if (isActive) {
-      const userData = getUserSessionData();
-
-      if (userData) {
-        showNotification({ text: `Your session restored, ${userData.username}`, severity: 'info' });
-        login({ id: userData.id, email: userData.email, username: userData.username });
+      if (isActive === null) {
+        setIsSessionChecking(false);
+        return;
       }
-    } else {
-      showNotification({ text: 'Session expired, please log in', severity: 'warning' });
-    }
 
-    setIsSessionChecking(false);
+      if (isActive) {
+        const userData = getUserSessionData();
+
+        if (userData) {
+          showNotification({ text: `Your session restored, ${userData.username}`, severity: 'info' });
+          login({ id: userData.id, email: userData.email, username: userData.username });
+        }
+      } else {
+        showNotification({ text: 'Session expired, please log in', severity: 'warning' });
+      }
+
+      setIsSessionChecking(false);
+    };
+
+    checkSession();
   }, [isSessionActive, getUserSessionData, login, showNotification]);
 
   return { isSessionChecking };

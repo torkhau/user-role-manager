@@ -1,7 +1,10 @@
-import { API_BASE_URL } from '../const';
+import { API_BASE_URL, FAKE_DELAY } from '../const';
+import { fakeDelay } from '../utils';
 import type { IErrorResponse, ISuccessResponse, TApiResponse } from './types';
 
 export const apiFetch = async <T>(endpoint: string, options?: RequestInit): Promise<TApiResponse<T>> => {
+  if (FAKE_DELAY) await fakeDelay();
+
   try {
     const res = await fetch(`${API_BASE_URL}/${endpoint}`, {
       headers: { 'Content-Type': 'application/json' },
