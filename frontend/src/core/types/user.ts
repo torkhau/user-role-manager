@@ -1,11 +1,21 @@
-import type { IEffectiveRole, IRole } from './role';
+import type { IRole } from './role';
 
 export interface IUser {
   id: string;
   email: string;
   username: string;
   roles: IRole[];
-  effectiveRoles: IEffectiveRole[];
 }
 
-export interface IUserSessionData extends Pick<IUser, 'id' | 'email' | 'username'> {}
+export interface IUserSessionData extends Pick<IUser, 'id' | 'email' | 'username'> {
+  isAdmin?: boolean;
+}
+
+export interface IUserRole extends IRole {
+  checked: boolean;
+  disabled?: boolean;
+}
+
+export interface IUserTableItem extends IUser {
+  roles: IUserRole[];
+}
