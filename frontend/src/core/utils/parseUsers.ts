@@ -1,5 +1,5 @@
 import type { TApiResponse } from '../api/types';
-import type { HeadTableCell, IRole, IUser, IUserRole, IUserTableItem, TableData } from '../types';
+import type { HeadTableCell, IRole, IUser, IUserRole, IUserTableItem } from '../types';
 import { isResponseSuccess } from './isResponseSuccess';
 
 const mapUserRoles = (userRoles: IRole[], allRoles: IRole[], isAdmin: boolean): IUserRole[] => {
@@ -21,11 +21,7 @@ const mapUserRoles = (userRoles: IRole[], allRoles: IRole[], isAdmin: boolean): 
   });
 };
 
-export const parseUsers = (
-  users: TApiResponse<IUser[]>,
-  roles: TApiResponse<IRole[]>,
-  isAdmin = false
-): TableData<IUserTableItem> => {
+export const parseUsers = (users: TApiResponse<IUser[]>, roles: TApiResponse<IRole[]>, isAdmin = false) => {
   if (!isResponseSuccess(users) || !isResponseSuccess(roles)) {
     console.error('Error loading users');
     return { rows: [], headCells: [] };

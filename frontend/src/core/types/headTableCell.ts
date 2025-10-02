@@ -4,6 +4,5 @@ export interface HeadTableCell<T> {
 }
 
 export interface TableData<T> {
-  rows: T[];
   headCells: HeadTableCell<T>[];
 }

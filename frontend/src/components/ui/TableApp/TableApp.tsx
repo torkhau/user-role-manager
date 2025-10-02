@@ -5,14 +5,16 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import type { ReactNode } from 'react';
 import type { TableData } from '../../../core/types';
 import { TableToolbar } from '../TableToolbar';
 
 interface TableAppProps<T extends { id: string | number }> extends TableData<T> {
   tableName: string;
+  children: ReactNode;
 }
 
-export function TableApp<T extends { id: string | number }>({ headCells, tableName, rows }: TableAppProps<T>) {
+export function TableApp<T extends { id: string | number }>({ headCells, tableName, children }: TableAppProps<T>) {
   return (
     <Paper sx={{ width: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', maxWidth: 750 }}>
       <TableToolbar tableName={tableName} />
@@ -20,21 +22,13 @@ export function TableApp<T extends { id: string | number }>({ headCells, tableNa
         <Table stickyHeader aria-labelledby='tableTitle'>
           <TableHead>
             <TableRow>
-              {headCells.map(({ label }) => (
-                <TableCell key={label}>{label}</TableCell>
+              {headCells.map(({ id, label }) => (
+                <TableCell key={String(id)}>{label}</TableCell>
               ))}
             </TableRow>
           </TableHead>
 
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow tabIndex={-1} key={row.id}>
-                {headCells.map(({ id }) => (
-                  <TableCell key={String(id)}>{String(row[id])}</TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
+          <TableBody>{children}</TableBody>
         </Table>
       </TableContainer>
     </Paper>

@@ -1,8 +1,8 @@
 import type { TApiResponse } from '../api/types';
-import type { HeadTableCell, IRole, TableData } from '../types';
+import type { HeadTableCell, IRole } from '../types';
 import { isResponseSuccess } from './isResponseSuccess';
 
-export const parseRoles = (roles: TApiResponse<IRole[]>): TableData<IRole> => {
+export const parseRoles = (roles: TApiResponse<IRole[]>) => {
   if (!isResponseSuccess(roles)) {
     console.error('Error loading roles');
     return { rows: [], headCells: [] };
