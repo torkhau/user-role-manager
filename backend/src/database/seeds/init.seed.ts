@@ -18,7 +18,7 @@ async function init() {
     { username: 'Bob', email: 'bob@mail.com', password: 'p2', roles: [adminRole] },
     { username: 'Charlie', email: 'charlie@mail.com', password: 'p3', roles: [viewerRole] },
     { username: 'David', email: 'david@mail.com', password: 'p4', roles: [editorRole] },
-    { username: 'Eve', email: 'eve@example.com', password: 'p5', roles: [editorRole, viewerRole] },
+    { username: 'Eve', email: 'eve@mail.com', password: 'p5', roles: [editorRole, viewerRole] },
   ];
 
   const userRepository = appDatasource.getRepository(User);
