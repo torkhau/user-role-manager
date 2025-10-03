@@ -46,7 +46,6 @@ export class UserController {
     @Headers() headers: Record<string, string>,
     @Body() rolesDTO: RoleDTO[]
   ): Promise<IResponse<UserDTO>> {
-    console.log('headers', headers)
     const { userId, email, username } = this.extractAuthHeaders(headers);
 
     const targetUserId = this.parseId(id, 'Invalid target user ID');
