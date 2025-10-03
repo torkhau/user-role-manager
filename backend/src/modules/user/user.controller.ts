@@ -16,9 +16,9 @@ export class UserController {
   }
 
   private extractAuthHeaders(headers: Record<string, string>) {
-    const userId = headers['X-User-Id'];
-    const email = headers['X-User-Email'];
-    const username = headers['X-User-Username'];
+    const userId = headers['x-user-id'];
+    const email = headers['x-user-email'];
+    const username = headers['x-user-username'];
 
     if (!userId || !email || !username) throw new UnauthorizedException('Missing required authentication headers');
 
@@ -27,7 +27,9 @@ export class UserController {
 
   private parseId(id: string, errorMessage: string): number {
     const parsed = parseInt(id, 10);
+
     if (isNaN(parsed)) throw new UnauthorizedException(errorMessage);
+
     return parsed;
   }
 
@@ -42,14 +44,16 @@ export class UserController {
   async updateRoles(
     @Param('id') id: string,
     @Headers() headers: Record<string, string>,
-    @Body() rolesDTO: Pick<RoleDTO, 'id'>[]
+    @Body() rolesDTO: RoleDTO[]
   ): Promise<IResponse<UserDTO>> {
+    console.log('headers', headers)
     const { userId, email, username } = this.extractAuthHeaders(headers);
 
     const targetUserId = this.parseId(id, 'Invalid target user ID');
     const initiatorId = this.parseId(userId, 'Invalid initiator user ID');
 
     const isAdmin = await this.userService.isUserAdmin(initiatorId, email, username);
+    
     if (!isAdmin) throw new UnauthorizedException('You do not have permission to update roles');
 
     const user = await this.userService.updateRoles(targetUserId, rolesDTO);
