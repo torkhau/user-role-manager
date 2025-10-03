@@ -26,7 +26,35 @@ This is a pet project demonstrating a fullstack architecture for managing user r
   - `GET /users` — fetches the list of users
   - `GET /roles` — retrieves available role types
   - `PATCH /users/:id/roles` — updates user roles; validates session and denies access if the current user is not an administrator
- 
+
+### UX Behavior
+
+- **Auto-save on blur** — the role selection component (`Select`) automatically triggers a save operation when the user clicks outside the dropdown. This ensures that changes are applied immediately without requiring an explicit "Save" action.
+- The update is sent to the backend via `PATCH /users/:id/roles`, and the application state reflects the new role assignment in real time.
+- If the current user loses Admin rights during this interaction, the session updates instantly and editing capabilities are revoked.
+
+###  Disclaimer
+
+This is a pet project intended for educational and architectural exploration. As such:
+
+- No `.env` file is used; sensitive values like passwords are stored in plain text for simplicity.
+- The session mechanism is a simplified prototype and does not use secure JWT tokens.
+- Authentication and role management are implemented for demonstration purposes only and should not be considered production-ready.
+
+Future improvements may include:
+
+- Secure password hashing and storage
+- JWT-based session handling
+- Environment variable management via `.env`
+- Role-based guards and access control middleware
+
+### Simulated Network Delay
+
+To test how the application behaves under slow network conditions, a built-in delay mechanism is available.
+
+- By default, all requests are executed without delay.
+- To enable artificial delay, open: `frontend/src/core/const/const.ts` and set the following constant: `export const FAKE_DELAY = false;` to `export const FAKE_DELAY = true;`. This will apply a 3000ms delay to all frontend requests, allowing you to observe loading indicators and UX behavior under simulated latency.
+
 ## Installation & Setup
 
 ### Clone the Repository
@@ -110,3 +138,9 @@ Start the development server
 npm run dev
 ```
 The frontend will launch on http://localhost:5173 by default. It communicates with the backend via REST API and uses session context to manage access control.
+### Screenshots
+<img width="1873" height="826" alt="image" src="https://github.com/user-attachments/assets/85f1d49e-54e6-4e34-8756-959e54fccb88" />
+<img width="1879" height="833" alt="image" src="https://github.com/user-attachments/assets/5cd43bb8-5941-4ba5-a622-ea50410b9684" />
+<img width="913" height="744" alt="image" src="https://github.com/user-attachments/assets/6f52d110-4940-40a2-a51c-0d1317134f98" />
+
+
