@@ -1,6 +1,9 @@
 import { useCallback } from 'react';
-import { SESSION_DURATION, SESSION_EXPIRES_AT, SESSION_USER_DATA } from '../const';
 import type { IUserSessionData } from '../types';
+
+const SESSION_DURATION = 60 * 60 * 1000; // 1 hour
+const SESSION_USER_DATA = 'session_user_data';
+const SESSION_EXPIRES_AT = 'session_expires_at';
 
 export const useSession = () => {
   const startSession = useCallback((user: IUserSessionData) => {
