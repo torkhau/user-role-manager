@@ -12,12 +12,18 @@ import { TableToolbar } from '../TableToolbar';
 interface TableAppProps<T extends { id: string | number }> extends TableData<T> {
   tableName: ReactNode;
   children: ReactNode;
+  filterActions?: ReactNode;
 }
 
-export function TableApp<T extends { id: string | number }>({ headCells, tableName, children }: TableAppProps<T>) {
+export function TableApp<T extends { id: string | number }>({
+  headCells,
+  tableName,
+  children,
+  filterActions,
+}: TableAppProps<T>) {
   return (
     <Paper sx={{ width: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', maxWidth: 750 }}>
-      <TableToolbar tableName={tableName} />
+      <TableToolbar tableName={tableName} actions={filterActions} />
       <TableContainer>
         <Table stickyHeader aria-labelledby='tableTitle'>
           <TableHead>

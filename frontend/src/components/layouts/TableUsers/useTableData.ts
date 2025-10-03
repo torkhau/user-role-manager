@@ -1,9 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getRoles, getUsers, patchUserRoles } from '../../../core/api';
 import { useAuthContext } from '../../../core/contexts/auth';
 import { useMenuItemContext } from '../../../core/contexts/menuItem';
 import { useNotificationContext } from '../../../core/contexts/notifications';
-import type { HeadTableCell, INotificationMessage, IRole, IUserSessionData, IUserTableItem } from '../../../core/types';
+import type {
+  HeadTableCell,
+  INotificationMessage,
+  IRole,
+  IUserRole,
+  IUserSessionData,
+  IUserTableItem,
+} from '../../../core/types';
 import { parseUsers } from '../../../core/utils';
 import { isResponseSuccess } from '../../../core/utils/isResponseSuccess';
 
@@ -11,14 +18,13 @@ export const useTableData = () => {
   const { user, login } = useAuthContext();
   const { menuItem } = useMenuItemContext();
   const { showNotification } = useNotificationContext();
-  const [rows, setRows] = useState<IUserTableItem[]>([]);
+
+  const [allRows, setAllRows] = useState<IUserTableItem[]>([]);
+  const [allRoles, setAllRoles] = useState<IRole[]>([]);
   const [headCells, setHeadCells] = useState<HeadTableCell<IUserTableItem>[]>([]);
   const [loading, setLoading] = useState(false);
   const [updatingRoles, setUpdatingRoles] = useState<Record<string, boolean>>({});
-
-  const setLoadingForUser = (userId: string, isLoading: boolean) => {
-    setUpdatingRoles((prev) => ({ ...prev, [userId]: isLoading }));
-  };
+  const [roleFilter, setRoleFilter] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,12 +33,17 @@ export const useTableData = () => {
       const [roles, users] = await Promise.all([getRoles(), getUsers()]);
 
       if (isResponseSuccess(roles) && isResponseSuccess(users)) {
-        const { rows, headCells } = parseUsers(users.data, roles.data, user?.isAdmin);
+        const usersData = users.data;
+        const rolesData = roles.data;
 
-        setRows(rows);
+        const { rows, headCells } = parseUsers(usersData, rolesData, user?.isAdmin);
+
+        setAllRows(rows);
+        setAllRoles(rolesData);
         setHeadCells(headCells);
       } else {
-        setRows([]);
+        setAllRows([]);
+        setAllRoles([]);
       }
 
       const msg: INotificationMessage = { text: '', severity: 'info' };
@@ -55,51 +66,77 @@ export const useTableData = () => {
     fetchData();
   }, [menuItem, showNotification, user?.isAdmin]);
 
-  const updateUserRoles = async (rowId: string, newRoles: IRole[]) => {
-    if (!user) return;
+  const rows = useMemo(() => {
+    if (!roleFilter || roleFilter.length === 0) return allRows;
 
-    setLoadingForUser(rowId, true);
+    return allRows.filter((row) => row.roles.some((r) => r.checked && roleFilter.includes(r.id)));
+  }, [allRows, roleFilter]);
 
-    const updatedUser = await patchUserRoles(user, { userId: rowId, roles: newRoles });
+  const rolesForFilter: IUserRole[] = useMemo(() => {
+    return allRoles.map((r) => ({
+      id: r.id,
+      roleName: r.roleName,
+      checked: roleFilter.includes(r.id),
+      disabled: false,
+    }));
+  }, [allRoles, roleFilter]);
 
-    if (isResponseSuccess(updatedUser)) {
-      const updatedUserData = updatedUser.data;
+  const setLoadingForUser = useCallback((userId: string, isLoading: boolean) => {
+    setUpdatingRoles((prev) => ({ ...prev, [userId]: isLoading }));
+  }, []);
 
-      if (user.id === updatedUserData.id) {
-        const userSessionData: IUserSessionData = {
-          id: updatedUserData.id,
-          email: updatedUserData.email,
-          username: updatedUserData.username,
-        };
+  const updateUserRoles = useCallback(
+    async (rowId: string, newRoles: IRole[]) => {
+      if (!user) return;
 
-        if (updatedUserData.roles.some(({ roleName }) => roleName.toLowerCase() === 'admin'))
-          userSessionData.isAdmin = true;
+      setLoadingForUser(rowId, true);
 
-        login(userSessionData);
+      const updatedUser = await patchUserRoles(user, { userId: rowId, roles: newRoles });
+
+      if (isResponseSuccess(updatedUser)) {
+        const updatedUserData = updatedUser.data;
+
+        if (user.id === updatedUserData.id) {
+          const userSessionData: IUserSessionData = {
+            id: updatedUserData.id,
+            email: updatedUserData.email,
+            username: updatedUserData.username,
+          };
+
+          if (updatedUserData.roles.some(({ roleName }) => roleName.toLowerCase() === 'admin'))
+            userSessionData.isAdmin = true;
+
+          login(userSessionData);
+        }
+
+        setAllRows((prev) =>
+          prev.map((row) => {
+            if (row.id !== updatedUserData.id) return row;
+
+            const { roles: prevRoles, ...rest } = row;
+            const newRoles = prevRoles.map((prevRole) => {
+              const roleName = prevRole.roleName.toLowerCase();
+              const userHasRole = updatedUserData.roles.some((r) => r.roleName.toLowerCase() === roleName);
+
+              return { ...prevRole, checked: userHasRole };
+            });
+
+            return { ...rest, roles: newRoles };
+          })
+        );
       }
 
-      setRows((prev) =>
-        prev.map((row) => {
-          if (row.id !== updatedUserData.id) return row;
+      if (updatedUser.message)
+        showNotification({ text: updatedUser.message, severity: updatedUser.success ? 'success' : 'error' });
 
-          const { roles: prevRoles, ...rest } = row;
-          const newRoles = prevRoles.map((prevRole) => {
-            const roleName = prevRole.roleName.toLowerCase();
-            const userHasRole = updatedUserData.roles.some((r) => r.roleName.toLowerCase() === roleName);
+      setLoadingForUser(rowId, false);
+    },
+    [login, setLoadingForUser, showNotification, user]
+  );
 
-            return { ...prevRole, checked: userHasRole };
-          });
+  const setRoleFilterIds = useCallback((ids: string[]) => {
+    setRoleFilter(ids);
+  }, []);
 
-          return { ...rest, roles: newRoles };
-        })
-      );
-    }
-
-    if (updatedUser.message)
-      showNotification({ text: updatedUser.message, severity: updatedUser.success ? 'success' : 'error' });
-
-    setLoadingForUser(rowId, false);
-  };
-
-  return { rows, headCells, loading, updateUserRoles, updatingRoles };
+  return { rows, headCells, loading, updateUserRoles, updatingRoles, rolesForFilter, setRoleFilterIds };
 };
