@@ -10,10 +10,15 @@ import { isResponseSuccess } from '../../../core/utils/isResponseSuccess';
 export const useTableData = () => {
   const { user, login } = useAuthContext();
   const { menuItem } = useMenuItemContext();
+  const { showNotification } = useNotificationContext();
   const [rows, setRows] = useState<IUserTableItem[]>([]);
   const [headCells, setHeadCells] = useState<HeadTableCell<IUserTableItem>[]>([]);
   const [loading, setLoading] = useState(false);
-  const { showNotification } = useNotificationContext();
+  const [updatingRoles, setUpdatingRoles] = useState<Record<string, boolean>>({});
+
+  const setLoadingForUser = (userId: string, isLoading: boolean) => {
+    setUpdatingRoles((prev) => ({ ...prev, [userId]: isLoading }));
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,6 +58,8 @@ export const useTableData = () => {
   const updateUserRoles = async (rowId: string, newRoles: IRole[]) => {
     if (!user) return;
 
+    setLoadingForUser(rowId, true);
+
     const updatedUser = await patchUserRoles(user, { userId: rowId, roles: newRoles });
 
     if (isResponseSuccess(updatedUser)) {
@@ -90,7 +97,9 @@ export const useTableData = () => {
 
     if (updatedUser.message)
       showNotification({ text: updatedUser.message, severity: updatedUser.success ? 'success' : 'error' });
+
+    setLoadingForUser(rowId, false);
   };
 
-  return { rows, headCells, loading, updateUserRoles };
+  return { rows, headCells, loading, updateUserRoles, updatingRoles };
 };

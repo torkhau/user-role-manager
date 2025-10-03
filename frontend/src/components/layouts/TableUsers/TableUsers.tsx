@@ -4,7 +4,7 @@ import { MultipleSelectCheckmarks, TableApp, TableSkeleton } from '../../ui';
 import { useTableData } from './useTableData';
 
 export function TableUsers() {
-  const { rows, headCells, loading, updateUserRoles } = useTableData();
+  const { rows, headCells, loading, updateUserRoles, updatingRoles } = useTableData();
 
   const handleRoleSubmit = async (rowId: string, newRoles: IRole[]) => updateUserRoles(rowId, newRoles);
 
@@ -20,6 +20,7 @@ export function TableUsers() {
                 {id === 'roles' ? (
                   <MultipleSelectCheckmarks
                     items={row[id]}
+                    loading={updatingRoles[row.id]}
                     onSubmit={(newRoles) => handleRoleSubmit(row.id, newRoles)}
                   />
                 ) : (
