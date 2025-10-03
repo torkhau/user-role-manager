@@ -20,7 +20,7 @@ export const apiFetch = async <T>(endpoint: string, options?: RequestInit): Prom
       return { success: false, ...resData } as IErrorResponse;
     }
   } catch (error) {
-    console.error('Login failed', error);
+    console.error('Fetching filed', error);
 
     return { success: false, error: 'Unknown error', message: 'An unknown error occurred', statusCode: 500 };
   }
