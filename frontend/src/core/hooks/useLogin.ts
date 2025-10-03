@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { auth } from '../api';
 import { useAuthContext } from '../contexts/auth';
 import { useNotificationContext } from '../contexts/notifications';
+import { isResponseSuccess } from '../utils/isResponseSuccess';
 
 export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +16,9 @@ export const useLogin = () => {
 
     setIsLoading(false);
 
-    if (result.success) login(result.data);
+    if (isResponseSuccess(result)){
+      login(result.data)
+    }
 
     if (result.message) showNotification({ text: result.message, severity: result.success ? 'success' : 'error' });
   };

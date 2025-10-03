@@ -13,9 +13,9 @@ export const auth = (body: { email: string; password: string }) => {
   return apiFetch<IUserSessionData>('login', { method: 'POST', body: JSON.stringify(body) });
 };
 
-export const putUserRoles = (curUser: IUserSessionData, { userId, roles }: { userId: string; roles: IRole[] }) => {
+export const patchUserRoles = (curUser: IUserSessionData, { userId, roles }: { userId: string; roles: IRole[] }) => {
   const options = {
-    method: 'PUT',
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
       'X-User-Id': curUser.id,
@@ -25,5 +25,5 @@ export const putUserRoles = (curUser: IUserSessionData, { userId, roles }: { use
     body: JSON.stringify(roles),
   };
 
-  return apiFetch<IRole[]>(`users/${userId}/roles`, options);
+  return apiFetch<IUser>(`users/${userId}/roles`, options);
 };

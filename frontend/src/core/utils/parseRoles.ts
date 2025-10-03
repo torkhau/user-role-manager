@@ -1,19 +1,10 @@
-import type { TApiResponse } from '../api/types';
 import type { HeadTableCell, IRole } from '../types';
-import { isResponseSuccess } from './isResponseSuccess';
 
-export const parseRoles = (roles: TApiResponse<IRole[]>) => {
-  if (!isResponseSuccess(roles)) {
-    console.error('Error loading roles');
-    return { rows: [], headCells: [] };
-  }
-
-  const rows = roles.data;
-
+export const parseRoles = (roles: IRole[]) => {
   const headCells: HeadTableCell<IRole>[] = [
     { id: 'id', label: 'ID' },
     { id: 'roleName', label: 'Role Name' },
   ];
 
-  return { rows, headCells };
+  return { rows: roles, headCells };
 };
